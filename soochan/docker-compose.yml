@@ -1,0 +1,24 @@
+version: "3.3"
+services:
+  mariadb:
+    image: mariadb:11.0.2
+    ports:
+      - 3306:3306
+    volumes:
+      - C:\Users\20200\Mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: bot
+  api:
+    image: kwaksoochan/docker:0.1
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST : mariadb
+      DB_PASSWORD: password
+      LOG_LVL: prod
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      - mariadb
+    command:
+      "sh -c /opt/bbot/start.sh"
