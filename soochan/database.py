@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from config import conf
 
 # Database connection string
-DB_CONN= f'mysql+pymysql://root:{conf["dbpassword"]}@mariadb:3306/bot'
+DB_CONN= f'mysql+pymysql://root:{conf["dbpassword"]}@localhost:3306/bot'
 
 class SQLAlchemy():
 

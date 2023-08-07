@@ -1,6 +1,5 @@
 from datetime import datetime
-import hashlib
-import secrets  # 무작위 솔트 생성을 위해 secrets 모듈을 가져옵니다.
+import hashlib 
 from fastapi import Depends, FastAPI
 import logging
 from sqlalchemy.orm import Session
@@ -8,24 +7,24 @@ from sqlalchemy.orm import Session
 from database import db
 from crud import write_access_data
 from schema import Access_Data
+from config import salt
 
 app = FastAPI()
 
 
 @app.get("/")
 async def root():
-    """ 루트 API """
-    logging.info("hello")
-    return {"message": "hello"}
+    """ Root API """
+    logging.info("Hello World")
+    return {"message": "Hello World"}
 
 @app.post("/access")
-async def access(user_id: str, channel_id: str, access_time: datetime, access_db: Session = Depends(db.get_session)):
-    """액세스 API"""
-    logging.info("액세스 API")
-    
-    salt = secrets.token_hex(16) 
-
-    access_id_raw = user_id + channel_id + str(access_time) + salt
+async def access(access_item: Access_Data, access_db: Session = Depends(db.get_session)):
+    """Access API"""
+    logging.info("Access API")
+    # make Access_Data
+    access_id_raw = access_item.user_id + access_item.channel_id + str(access_item.access_time) + salt
+    # hash each 5 times
+    # for _ in range(5):
     access_id = hashlib.sha256(access_id_raw.encode('utf-8')).hexdigest()
-    print("hi2")
-    return write_access_data(access_id, access_db)
+    return write_access_data(access_id, access_item, access_db)

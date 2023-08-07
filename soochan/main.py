@@ -13,7 +13,7 @@ if __name__ == '__main__':
                 reload=True,
             )
         else:
-            uvicorn.run(    
+            uvicorn.run(
                 "api:app",
                 host='0.0.0.0',
                 port=8080,
